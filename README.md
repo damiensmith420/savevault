@@ -1,216 +1,99 @@
 # 🔒 SaveVault
 
-**SaveVault** is a Windows desktop application that backs up your game save files to your own Google Drive. No third-party servers, no subscriptions — your saves go directly to a `Save Games/` folder in your personal Google Drive.
+**Never lose a save game again.**
+
+SaveVault backs up your game save files directly to your own Google Drive — no third-party servers, no subscriptions, no accounts to create. Just sign in with Google and your saves are safe.
 
 ---
 
-## Features
+## Download
 
-- 🔐 OAuth 2.0 sign-in with Google (drive.file scope — only sees files it creates)
-- 📁 Track multiple games with individual save directories
-- ☁ Automatic sync to `Save Games/<Game Name>/` in your Drive
-- ⚡ Conflict detection — if both sides changed, you choose which to keep
-- 🔄 Sync All with one click, or sync individual games
-- 🖥 Modern dark-themed UI built with CustomTkinter
+Grab the latest `SaveVault.exe` from the [Releases page](../../releases). No installation needed — just run it.
+
+**Requirements:** Windows 10 or 11 (64-bit) · A Google account · That's it.
 
 ---
 
-## Privacy Statement
+## How It Works
 
-SaveVault requests the `drive.file` scope only. This means:
+1. **Sign in** with your Google account
+2. **Add a game** — give it a name and point SaveVault at the folder where it stores saves
+3. **Click Sync** — your saves upload to a `Save Games/<Game Name>/` folder in your Drive
+4. On any other PC, sign in again and sync back down
 
-- It can **only** read and write files that it created.
-- It **cannot** browse, read, or modify any other files in your Google Drive.
-- No credentials, save files, or metadata are ever sent to any server other than Google's own APIs.
-- No telemetry, no analytics, no external network calls beyond Google Drive.
-
-Your saves stay between you and your Google account.
+SaveVault mirrors your entire save folder structure — including all subfolders — exactly as it is on your machine.
 
 ---
 
-## Requirements
+## Your Data, Your Drive
 
-- Windows 10/11 (64-bit)
-- Python 3.10+ (if running from source)
-- A Google account
+SaveVault uses Google's `drive.file` permission scope. This means:
 
----
-
-## Setting Up Google Cloud Credentials
-
-SaveVault needs OAuth client credentials from Google Cloud Console. These are **free** and remain entirely under your control.
-
-### Step 1 — Create a Google Cloud Project
-
-1. Go to [https://console.cloud.google.com/](https://console.cloud.google.com/)
-2. Click the project dropdown at the top → **New Project**
-3. Give it a name (e.g. "SaveVault") and click **Create**
-
-### Step 2 — Enable the Google Drive API
-
-1. In your new project, navigate to **APIs & Services → Library**
-2. Search for **"Google Drive API"**
-3. Click it and press **Enable**
-
-### Step 3 — Configure the OAuth Consent Screen
-
-1. Go to **APIs & Services → OAuth consent screen**
-2. Choose **External** and click **Create**
-3. Fill in:
-   - **App name**: SaveVault
-   - **User support email**: your email
-   - **Developer contact**: your email
-4. Click **Save and Continue** through the Scopes screen (no extra scopes needed here)
-5. On the **Test users** screen, click **Add Users** and add your own Google account
-6. Click **Save and Continue**
-
-> ⚠️ While the app is in "Testing" mode, only accounts listed as Test Users can sign in. This is fine for personal use.
-
-### Step 4 — Create OAuth Credentials
-
-1. Go to **APIs & Services → Credentials**
-2. Click **+ Create Credentials → OAuth client ID**
-3. Select **Desktop app** as the application type
-4. Give it a name (e.g. "SaveVault Desktop") and click **Create**
-5. A dialog shows your **Client ID** and **Client Secret** — copy both
-
-### Step 5 — Add Credentials to SaveVault
-
-Open `src/auth.py` and replace the placeholder constants near the top:
-
-```python
-# src/auth.py  (around line 38)
-_CLIENT_ID = "YOUR_CLIENT_ID.apps.googleusercontent.com"   # ← replace
-_CLIENT_SECRET = "YOUR_CLIENT_SECRET"                       # ← replace
-```
-
-Paste your actual Client ID and Client Secret from Step 4.
+- ✅ It can **only** see files that it created — nothing else in your Drive
+- ✅ Your saves go directly from your PC to your Google account — no middleman
+- ✅ No telemetry, no analytics, no external servers of any kind
+- ✅ Delete the app and your saves stay in your Drive forever
 
 ---
 
-## Running from Source
-
-### 1. Install Python 3.10+
-
-Download from [https://www.python.org/downloads/](https://www.python.org/downloads/).  
-Make sure to check **"Add Python to PATH"** during installation.
-
-### 2. Clone the repository
-
-```bash
-git clone https://github.com/yourname/savevault.git
-cd savevault
-```
-
-### 3. Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Add your OAuth credentials
-
-Edit `src/auth.py` as described in **Step 5** above.
-
-### 5. Run
-
-```bash
-python main.py
-```
-
-On first launch, a browser window will open for Google sign-in. After authenticating, SaveVault saves a token to `~/.savevault/token.json` so you won't need to sign in again.
-
----
-
-## Adding Games
+## Adding a Game
 
 1. Click **＋ Add Game** in the left panel
-2. Enter the game name (used as the Drive subfolder name)
-3. Click **Browse…** and select the folder containing your save files
-4. Click **Add Game** — SaveVault creates the Drive folder immediately
+2. Type the game name (this becomes the folder name in your Drive)
+3. Click **Browse…** and select the folder where the game stores its saves
+4. Click **Add Game**
+
+Not sure where a game stores its saves? Check [PCGamingWiki](https://www.pcgamingwiki.com) — it lists save locations for thousands of games.
 
 ---
 
 ## Syncing
 
-- **Sync This Game** — syncs the currently selected game
-- **Sync All** — syncs every tracked game sequentially
-- If a file was changed on both sides since the last sync, a **Conflict Resolution** dialog appears where you choose which version to keep
+- **Sync This Game** — syncs only the selected game
+- **Sync All** — syncs every tracked game one after another
+- If a file changed on **both** your PC and Drive since the last sync, SaveVault asks you which version to keep — file by file, with timestamps shown for both sides
 
 ---
 
-## Building the .exe with PyInstaller
+## Restoring Saves on a New PC
 
-After adding your credentials and testing that the app runs from source:
-
-```bash
-pip install pyinstaller
-pyinstaller build.spec
-```
-
-The output will be at:
-
-```
-dist/SaveVault.exe
-```
-
-This is a single, portable executable with no external dependencies. Copy it anywhere and run it.
-
-> **Note:** The `.exe` embeds your OAuth credentials. Do not share it publicly unless you want others to use your Google Cloud quota.
-
----
-
-## File Locations
-
-| File | Purpose |
-|------|---------|
-| `~/.savevault/config.json` | Tracked games, local paths, Drive folder IDs |
-| `~/.savevault/token.json`  | OAuth token (auto-refreshed, delete to sign out) |
-
----
-
-## Project Structure
-
-```
-savevault/
-├── main.py                  Entry point
-├── requirements.txt         Python dependencies
-├── build.spec               PyInstaller build config
-├── README.md                This file
-├── assets/
-│   └── icon.ico             Application icon
-└── src/
-    ├── app.py               Root CTk App class (sign-in flow, lifecycle)
-    ├── auth.py              Google OAuth 2.0 (token storage, refresh)
-    ├── drive.py             Google Drive API wrapper
-    ├── sync.py              Diff engine + sync plan execution
-    ├── storage.py           Config persistence (~/.savevault/config.json)
-    └── ui/
-        ├── main_window.py   Main window layout + sync orchestration
-        ├── game_list.py     Left panel: scrollable game list
-        ├── add_game_dialog.py  Add game modal
-        ├── sync_dialog.py   Conflict resolution modal
-        └── link_dialog.py   Startup dialog for unlinked Drive saves
-```
+1. Install SaveVault and sign in with the same Google account
+2. SaveVault detects your existing `Save Games/` folder in Drive automatically
+3. A dialog asks you to link each game to its local save path on the new machine
+4. Hit **Sync** — your saves come back down
 
 ---
 
 ## Troubleshooting
 
-**"OAuth credentials not configured"**  
-→ You haven't replaced the placeholder constants in `src/auth.py`. See Step 5 above.
+**"Access blocked" or "Error 403: access_denied" when signing in**
+→ Click **Advanced** → **Go to SaveVault (unsafe)** on the Google warning screen.
+This appears because the app hasn't gone through Google's formal review process yet.
+It is safe — Google shows this for all unreviewed apps regardless of what they do.
 
-**"Access blocked: SaveVault has not completed the Google verification process"**  
-→ Your app is in Testing mode. Add your Google account as a Test User in the OAuth consent screen (Step 3, Test users).
+**Sign-in browser window doesn't open**
+→ Check that your firewall or antivirus isn't blocking localhost connections.
+Try temporarily disabling it to confirm, then add an exception for SaveVault.
 
-**Sign-in browser window doesn't open**  
-→ Try running from a terminal (`python main.py`) to see error output. Ensure your firewall allows localhost connections.
+**Files not showing up after sync**
+→ Make sure the local path still exists and hasn't moved. Remove and re-add the game
+if the path has changed.
 
-**Files not appearing in the file table**  
-→ The local path may not exist or the Drive folder ID may be missing. Try removing and re-adding the game.
+**Saves aren't all backed up**
+→ Make sure you selected the correct root folder for that game's saves.
+SaveVault backs up everything inside that folder including all subfolders.
+
+---
+
+## Want to Build It Yourself?
+
+If you'd prefer to use your own Google Cloud credentials instead of the ones bundled
+in this release — for example, if you want to host this for a group of friends on
+your own quota — see **[INSTRUCTIONS.txt](INSTRUCTIONS.txt)** for a full step-by-step
+guide to building SaveVault from source with your own credentials.
 
 ---
 
 ## License
 
-MIT — do whatever you want, but please don't use this to violate Google's Terms of Service.
+MIT — free to use, modify, and distribute.

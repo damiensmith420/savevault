@@ -1,0 +1,209 @@
+================================================================================
+  SAVEVAULT — BUILD FROM SOURCE WITH YOUR OWN GOOGLE CREDENTIALS
+================================================================================
+
+This guide is for developers and technically-minded users who want to build
+SaveVault themselves using their own Google Cloud project and OAuth credentials.
+
+Why would you want this?
+  - You want to distribute SaveVault to friends/users under your own app name
+  - You want full control over your own Google Cloud quota
+  - You prefer not to use credentials bundled by someone else
+
+--------------------------------------------------------------------------------
+PART 1 — WHAT YOU NEED
+--------------------------------------------------------------------------------
+
+  - Windows 10/11 (64-bit)
+  - Python 3.10 or newer       https://www.python.org/downloads/
+    (Check "Add Python to PATH" during install)
+  - Git (optional)             https://git-scm.com/
+  - A Google account
+
+
+--------------------------------------------------------------------------------
+PART 2 — GET THE SOURCE CODE
+--------------------------------------------------------------------------------
+
+Option A — Clone with Git:
+
+    git clone https://github.com/damiensmith420/savevault.git
+    cd savevault
+
+Option B — Download ZIP:
+
+    Go to the repository page on GitHub, click Code → Download ZIP,
+    extract it, and open a terminal in the extracted folder.
+
+
+--------------------------------------------------------------------------------
+PART 3 — SET UP A GOOGLE CLOUD PROJECT
+--------------------------------------------------------------------------------
+
+Step 1 — Create the project
+  1. Go to https://console.cloud.google.com/
+  2. Click the project dropdown at the top of the page
+  3. Click "New Project"
+  4. Name it "SaveVault" (or anything you like) and click Create
+  5. Wait a moment, then make sure the new project is selected in the dropdown
+
+Step 2 — Enable the Google Drive API
+  1. In your project, go to APIs & Services → Library
+  2. Search for "Google Drive API"
+  3. Click it, then click Enable
+
+Step 3 — Configure the OAuth Consent Screen
+  1. Go to APIs & Services → OAuth consent screen
+  2. Select "External" and click Create
+  3. Fill in the required fields:
+       App name:              SaveVault  (or your own name)
+       User support email:    your Gmail address
+       Developer contact:     your Gmail address
+  4. Click Save and Continue
+  5. On the Scopes page:
+       - Click "Add or Remove Scopes"
+       - In the filter box, type:  drive.file
+       - Check the box next to:
+           Google Drive API — .../auth/drive.file
+           "See, edit, create, and delete only the specific Google Drive
+            files you use with this app"
+       - Click Update, then Save and Continue
+  6. On the Test Users page:
+       - Click + Add Users
+       - Add your own Gmail address
+       - Add any other accounts that will use the app
+  7. Click Save and Continue, then Back to Dashboard
+
+  NOTE: While the app is in "Testing" mode, ONLY accounts listed as Test Users
+  can sign in. This is intentional and fine for personal or small group use.
+  If you want anyone to sign in without the "unverified app" warning, you need
+  to submit for Google's verification review — see Part 5.
+
+Step 4 — Create OAuth Credentials
+  1. Go to APIs & Services → Credentials
+  2. Click + Create Credentials → OAuth client ID
+  3. Application type: Desktop app
+  4. Name: SaveVault Desktop  (or anything)
+  5. Click Create
+  6. A popup shows your Client ID and Client Secret
+  7. Copy both values — you'll need them in the next step
+
+
+--------------------------------------------------------------------------------
+PART 4 — ADD YOUR CREDENTIALS TO THE SOURCE CODE
+--------------------------------------------------------------------------------
+
+Open this file in any text editor:
+
+    savevault/src/auth.py
+
+Near the top (around line 38) you'll see:
+
+    _EMBEDDED_CLIENT_ID     = "REPLACE_WITH_YOUR_NEW_CLIENT_ID"
+    _EMBEDDED_CLIENT_SECRET = "REPLACE_WITH_YOUR_NEW_CLIENT_SECRET"
+
+Replace both strings with the values you copied in Step 4:
+
+    _EMBEDDED_CLIENT_ID     = "123456789-abc.apps.googleusercontent.com"
+    _EMBEDDED_CLIENT_SECRET = "GOCSPX-xxxxxxxxxxxxxxxxxxxx"
+
+Save the file.
+
+  SECURITY NOTE:
+  Your Client Secret is safe to embed in a desktop app. Google's own
+  documentation acknowledges that the secret cannot be kept truly secret
+  in a distributed desktop application. It identifies your APP to Google,
+  not your personal account — it cannot be used to access anyone's data
+  without them explicitly clicking Allow on Google's own sign-in page.
+  See: https://developers.google.com/identity/protocols/oauth2/native-app
+
+
+--------------------------------------------------------------------------------
+PART 5 — INSTALL DEPENDENCIES
+--------------------------------------------------------------------------------
+
+Open a terminal in the savevault/ folder and run:
+
+    pip install -r requirements.txt
+
+This installs:
+  - customtkinter    (the UI framework)
+  - google-api-python-client
+  - google-auth-oauthlib
+  - google-auth-httplib2
+  - pillow
+
+
+--------------------------------------------------------------------------------
+PART 6 — TEST THAT IT RUNS
+--------------------------------------------------------------------------------
+
+    python main.py
+
+On first launch:
+  - A browser window opens for Google sign-in
+  - Sign in with an account you added as a Test User in Part 3, Step 6
+  - Click Allow on the permissions screen
+  - The app loads and you're ready to use it
+
+If you see "Access blocked: SaveVault has not completed the Google verification
+process" — click Advanced → Go to SaveVault (unsafe). This is normal for apps
+in Testing mode and is safe since you built it yourself.
+
+
+--------------------------------------------------------------------------------
+PART 7 — BUILD THE .EXE WITH PYINSTALLER
+--------------------------------------------------------------------------------
+
+Once the app runs correctly from source, build the standalone executable:
+
+    pip install pyinstaller
+    pyinstaller build.spec
+
+Output:
+
+    dist/SaveVault.exe
+
+This is a single portable .exe with no external dependencies.
+Copy it anywhere and run it — no Python installation required on the target PC.
+
+The build takes 1–3 minutes. A dist/ and build/ folder are created.
+Only dist/SaveVault.exe is needed — the build/ folder can be deleted.
+
+  NOTE: The .exe embeds your Client ID and Client Secret. This is fine for
+  personal use or distributing to trusted users. If you plan to publish it
+  publicly (e.g. on GitHub Releases), be aware that anyone determined enough
+  could extract those values from the binary — though as noted above, this
+  doesn't give them access to any user's data without explicit consent.
+
+
+--------------------------------------------------------------------------------
+PART 8 — (OPTIONAL) REMOVE THE "UNVERIFIED APP" WARNING FOR ALL USERS
+--------------------------------------------------------------------------------
+
+If you want anyone to sign in without seeing Google's warning screen, you need
+to submit your app for verification:
+
+  1. Go to APIs & Services → OAuth consent screen
+  2. Under "Publishing status", click Publish App
+  3. Fill in the additional required fields (homepage URL, privacy policy URL)
+  4. Click Submit for Verification
+
+Google reviews apps that request sensitive scopes (drive.file qualifies).
+The review typically takes a few days to a couple of weeks.
+Once approved, the warning screen disappears for all users permanently.
+
+Until then, users can bypass the warning by clicking Advanced →
+"Go to SaveVault (unsafe)" — it's just a label, not a real security risk.
+
+
+--------------------------------------------------------------------------------
+QUESTIONS / ISSUES
+--------------------------------------------------------------------------------
+
+If you run into problems building or running SaveVault from source, open an
+issue on the GitHub repository:
+
+    https://github.com/damiensmith420/savevault/issues
+
+================================================================================
