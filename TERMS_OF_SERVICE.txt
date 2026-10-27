@@ -1,0 +1,91 @@
+TERMS OF SERVICE
+SaveVault
+Last updated: October 2026
+
+───────────────────────────────────────────────────────────────────────────────
+
+1. ACCEPTANCE
+
+By downloading or using SaveVault ("the Application"), you agree to these Terms
+of Service.  If you do not agree, do not use the Application.
+
+───────────────────────────────────────────────────────────────────────────────
+
+2. WHAT SAVEVAULT DOES
+
+SaveVault is a free, open-source desktop utility that copies video game save
+files from your Windows PC to a folder in your own Google Drive account.  It
+performs no other function.
+
+───────────────────────────────────────────────────────────────────────────────
+
+3. LICENSE
+
+SaveVault is released under the MIT License.  You are free to use, copy,
+modify, merge, publish, distribute, sublicense, and/or sell copies of the
+software, subject to the conditions stated in the MIT License included with
+the source code.
+
+───────────────────────────────────────────────────────────────────────────────
+
+4. GOOGLE SERVICES
+
+SaveVault uses the Google Drive API and Google OAuth 2.0 to access your Google
+account.  By signing in, you also agree to Google's Terms of Service:
+
+  https://policies.google.com/terms
+
+SaveVault requests only the "drive.file" permission scope, which restricts the
+Application to files it has created.  It cannot access any other data in your
+Google account.
+
+───────────────────────────────────────────────────────────────────────────────
+
+5. YOUR RESPONSIBILITIES
+
+You are responsible for:
+
+  a. Ensuring you have the right to back up the game save files you select.
+  b. Maintaining the security of your own Google account.
+  c. Any Google Drive storage costs associated with your account (Google Drive
+     storage is governed by Google's own pricing and policies).
+
+───────────────────────────────────────────────────────────────────────────────
+
+6. NO WARRANTIES
+
+THE APPLICATION IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.  USE AT YOUR OWN RISK.
+
+In particular, the developer does not guarantee that:
+  - Every sync will complete without error.
+  - Your save files will be fully recoverable in all circumstances.
+
+You are encouraged to maintain additional backups of important save files.
+
+───────────────────────────────────────────────────────────────────────────────
+
+7. LIMITATION OF LIABILITY
+
+IN NO EVENT SHALL THE DEVELOPER BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER
+LIABILITY — WHETHER IN CONTRACT, TORT, OR OTHERWISE — ARISING FROM, OUT OF,
+OR IN CONNECTION WITH THE APPLICATION OR THE USE THEREOF, INCLUDING ANY LOSS
+OF GAME PROGRESS OR SAVE DATA.
+
+───────────────────────────────────────────────────────────────────────────────
+
+8. CHANGES TO THESE TERMS
+
+These Terms may be updated at any time.  The current version will always be
+available in the SaveVault GitHub repository.  Continued use of the Application
+after an update constitutes acceptance of the revised Terms.
+
+───────────────────────────────────────────────────────────────────────────────
+
+9. CONTACT
+
+SaveVault is an open-source project.  For questions or concerns, please open
+an issue on the GitHub repository.
+
+───────────────────────────────────────────────────────────────────────────────

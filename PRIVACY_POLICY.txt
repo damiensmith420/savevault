@@ -1,0 +1,83 @@
+PRIVACY POLICY
+SaveVault
+Last updated: June 2025
+
+───────────────────────────────────────────────────────────────────────────────
+
+1. OVERVIEW
+
+SaveVault is a free, open-source desktop application for Windows that backs up
+your video game save files to your own Google Drive account.  It is a personal
+utility — it has no backend servers, no user accounts, no analytics, and no
+data collection of any kind.
+
+───────────────────────────────────────────────────────────────────────────────
+
+2. DATA WE DO NOT COLLECT
+
+SaveVault does not collect, transmit, store, or share any personal data.
+Specifically:
+
+  - No telemetry or usage statistics are recorded.
+  - No crash reports are sent anywhere.
+  - No analytics libraries are included.
+  - No advertising identifiers are used.
+  - No email addresses, names, or any other personally identifiable information
+    are collected by the application or its developer.
+
+───────────────────────────────────────────────────────────────────────────────
+
+3. GOOGLE ACCOUNT ACCESS
+
+To back up your saves, SaveVault asks you to sign in with your Google account
+using the standard OAuth 2.0 consent screen.  SaveVault requests only the
+following permission scope:
+
+  https://www.googleapis.com/auth/drive.file
+
+This scope limits the application so that it can ONLY see and modify files that
+SaveVault itself created.  It cannot read, access, browse, list, modify, or
+delete any other files or folders in your Google Drive.
+
+Your OAuth token (the credential that proves you are signed in) is stored
+locally on your own computer at:
+
+  %USERPROFILE%\.savevault\token.json
+
+This file never leaves your machine except through the standard Google OAuth
+token-refresh mechanism that communicates directly with Google's servers.  The
+developer of SaveVault never receives, sees, or has access to your token,
+your email address, or any content of your Google Drive.
+
+───────────────────────────────────────────────────────────────────────────────
+
+4. YOUR SAVE FILES
+
+Your save files are uploaded directly from your PC to your own Google Drive
+account using the Google Drive API.  They are not routed through any
+third-party server.  The developer of SaveVault has no access to your files.
+
+───────────────────────────────────────────────────────────────────────────────
+
+5. THIRD-PARTY SERVICES
+
+SaveVault interacts only with Google's OAuth 2.0 and Google Drive v3 APIs.
+Your use of Google services is governed by Google's own Privacy Policy:
+
+  https://policies.google.com/privacy
+
+───────────────────────────────────────────────────────────────────────────────
+
+6. CHANGES TO THIS POLICY
+
+If this policy is ever updated, the new version will be committed to the
+SaveVault GitHub repository with an updated "Last updated" date above.
+
+───────────────────────────────────────────────────────────────────────────────
+
+7. CONTACT
+
+SaveVault is an open-source project.  For questions or concerns, please open
+an issue on the GitHub repository.
+
+───────────────────────────────────────────────────────────────────────────────
